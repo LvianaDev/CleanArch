@@ -2,18 +2,14 @@
 using CleanArchMvc.Domain.Interfaces;
 using CleanArchMvc.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace CleanArchMvc.Infra.Data.Repository
+namespace CleanArchMvc.Infra.Data.Repositories
 {
 	public class ProductRepository : IProductRepository
 	{
-		ApplicationDbContext _productContext;
-
+		private ApplicationDbContext _productContext;
 		public ProductRepository(ApplicationDbContext context)
 		{
 			_productContext = context;
@@ -31,14 +27,14 @@ namespace CleanArchMvc.Infra.Data.Repository
 			return await _productContext.Products.FindAsync(id);
 		}
 
-		public async Task<Product> GetProductsCategoriesAsync(int? id)
+		public async Task<Product> GetProductCategoryAsync(int? id)
 		{
 			//eager loading
 			return await _productContext.Products.Include(c => c.Category)
-						.SingleOrDefaultAsync(p => p.Id == id);
+				.SingleOrDefaultAsync(p => p.Id == id);
 		}
 
-		public async Task<IEnumerable<Product>> GetProductsCategories()
+		public async Task<IEnumerable<Product>> GetProductsAsync()
 		{
 			return await _productContext.Products.ToListAsync();
 		}
@@ -56,6 +52,5 @@ namespace CleanArchMvc.Infra.Data.Repository
 			await _productContext.SaveChangesAsync();
 			return product;
 		}
-		
 	}
 }
